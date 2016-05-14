@@ -1,7 +1,7 @@
 {
   "name": "reset-usb",
   "description": "reset a usb device on linux with ioctl",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "repository": {
     "url": "git://github.com/soldair/reset-usb.git"
   },
@@ -11,7 +11,7 @@
   },
   "author": "Ryan Day",
   "dependencies": {
-    "nan": "~1.4.0",
+    "nan": "^2.3.3",
     "tty-to-usb-device": "0.0.1"
   },
   "devDependencies": {

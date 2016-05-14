@@ -7,10 +7,66 @@
 #include <sys/ioctl.h>
 #include <linux/usbdevice_fs.h>
 
-#include "nan.h"
 
-using namespace v8;
-using namespace node;
+
+#include <nan.h>
+//using namespace v8;
+//using namespace node;
+
+
+
+void Reset(const Nan::FunctionCallbackInfo<v8::Value>& info) {
+
+  if (info.Length() < 1) {
+    Nan::ThrowTypeError("Wrong number of arguments");
+    return;
+  }
+
+  //Local<Object> obj = info[0].As<Object>();
+  //Local<String> name = Nan::Get(obj, Nan::New<String("name").ToLocalChecked()).ToLocalChecked()->ToString();
+  //v8::String::Utf8Value val(name);
+  //std::string str(*val);
+  //char* path = str.c_str();
+
+
+  //Local<String> name = Nan::Get(info[0].As<Object>(), Nan::New("name").ToLocalChecked()).ToLocalChecked();
+  //Nan::Utf8String val(name);
+  //char* path = *val;
+
+
+  Nan::Utf8String foo(info[0]);
+  std::string tempString(*foo);
+
+  int fd;
+  int rc;
+
+  fd = open( tempString.c_str(), O_WRONLY);
+  if (fd < 0) {
+    Nan::ThrowError("Error opening usb device file");
+  } else {
+
+    rc = ioctl(fd, USBDEVFS_RESET, 0);
+
+    if (rc < 0) {
+
+      Nan::ThrowError(" =( error issuing usb device reset. Error in ioctl.");
+    }
+  }
+
+  close(fd);
+
+  info.GetReturnValue().Set(1);
+}
+
+void Init(v8::Local<v8::Object> exports) {
+    exports->Set(Nan::New("reset").ToLocalChecked(),
+                       Nan::New<v8::FunctionTemplate>(Reset)->GetFunction());
+}
+
+NODE_MODULE(reset, Init)
+
+
+/*
 
 // based on 
 // usbreset -- send a USB port reset to a USB device 
@@ -54,3 +110,4 @@ void InitAll(Handle<Object> exports) {
 }
 
 NODE_MODULE(resetusb, InitAll);
+*/

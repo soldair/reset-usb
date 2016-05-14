@@ -1,5 +1,6 @@
 
 var addon = require('./build/Release/resetusb.node');
+
 var ttylookup = require('tty-to-usb-device')
 module.exports = function(path,cb){
   if(path.indexOf('/dev/tty') === 0) {
@@ -12,7 +13,7 @@ module.exports = function(path,cb){
 
   function reset(){
     try{
-      cb(false,addon.resetusb(path));
+      cb(false,addon.reset(path));
     } catch(e){
       cb(e);
     }
@@ -22,4 +23,4 @@ module.exports = function(path,cb){
 }
 
 // no support for tty paths.
-module.exports.resetSync = addon.resetusb;
+module.exports.resetSync = addon.reset
